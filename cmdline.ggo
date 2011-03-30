@@ -1,0 +1,6 @@
+package "synthetic data from the Stochastic Block Models"
+version "0.1"
+purpose "Generate network data"
+option  "K"                  K "Number of clusters, K"               int        yes
+option  "N"                  N "Number of nodes, N"                  int        yes
+option  "seed"                  s "Seed for srand48()"                  int        yes

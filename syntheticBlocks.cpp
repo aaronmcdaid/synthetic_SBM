@@ -6,17 +6,30 @@
 #include <math.h>
 #include <gsl/gsl_randist.h>
 #include "aaron_utils.hpp"
+#include "cmdline.h"
 using namespace std;
 int main(int argc, char ** argv) {
-	if(argc != 1 + 2) {
-		cerr << "Must have 2 args: N K" << endl;
+	gengetopt_args_info args_info;
+	if (cmdline_parser (argc, argv, &args_info) != 0)
+		exit(1) ;
+	if(args_info.inputs_num != 0) { // not expecting any non-option arguments
+		cmdline_parser_print_help();
 		exit(1);
 	}
-	const int N = atoi(argv[1]);
-	const int K = atoi(argv[2]);
+	PP(args_info.N_arg);
+	PP(args_info.K_arg);
+	PP(args_info.seed_arg);
 
-	srand48(0);
-	const gsl_rng * rng = gsl_rng_alloc (gsl_rng_taus);
+	const int N = args_info.N_arg;
+	const int K = args_info.K_arg;
+	const int seed = args_info.seed_arg;
+	PP2(N,K);
+
+	srand48(seed);
+	const gsl_rng * rng = gsl_rng_alloc (gsl_rng_mt19937);
+	PP(gsl_rng_uniform(rng));
+	gsl_rng_set(rng, seed);
+	PP(gsl_rng_uniform(rng));
 
 	const vector<double> alpha(K, 1.0);
 	vector<double> theta(K);
